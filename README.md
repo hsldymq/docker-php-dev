@@ -1,6 +1,6 @@
 # PHP开发用镜像
 
-####基于php官方镜像(alpine版)
+####基础镜像: php(alpine版)
 
 ####启用的扩展
 * amqp
