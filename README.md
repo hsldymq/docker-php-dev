@@ -32,13 +32,13 @@
 * openssl
 * pcntl
 * pcre
-* pdo
+* PDO
 * pdo_mysql
 * pdo_pgsql
 * pdo_sqlite
 * pdo_sqlsrv
 * pgsql
-* phar
+* Phar
 * posix
 * readline
 * redis
