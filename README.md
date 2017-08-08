@@ -20,6 +20,7 @@
 * gd
 * hash
 * iconv
+* imagick
 * imap
 * json
 * libxml

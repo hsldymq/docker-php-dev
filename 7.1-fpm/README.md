@@ -11,6 +11,7 @@
 * pdo_sqlsrv: 4.1.6.1
 * redis: 3.1.2
 * swoole: 1.9.13
+* imagick 3.4.3
 * xdebug: 2.5.4
 
 
