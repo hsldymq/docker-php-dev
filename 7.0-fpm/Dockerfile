@@ -1,31 +1,40 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.0-fpm-alpine
 
 ADD build/ /docker-build/
 
 RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirrors.ustc.edu.cn/alpine/latest-stable/community" > /etc/apk/repositories && \
     apk update && \
-    apk upgrade
- 
-RUN apk --no-cache add \
-    linux-headers \
-    autoconf \
-    build-base \
-    zlib-dev \
-    libtool \
-    postgresql-dev \
-    imap-dev \
-    bzip2-dev \
-    libmcrypt-dev \
-    freetype-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libevent-dev \
-    cyrus-sasl-dev \
-    rabbitmq-c-dev \
-    libmemcached-dev \
-    pcre-dev \
-    unixodbc-dev \
-    imagemagick-dev
+    apk upgrade && \
+    apk --no-cache add ca-certificates && update-ca-certificates && \
+    apk --no-cache add \
+        autoconf \
+        build-base \
+        zlib-dev \
+        libtool \
+        linux-headers \
+        postgresql-dev \
+        imap-dev \
+        bzip2-dev \
+        libmcrypt-dev \
+        freetype-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        libevent-dev \
+        cyrus-sasl-dev \
+        rabbitmq-c-dev \
+        libmemcached-dev \
+        pcre-dev \
+        unixodbc-dev \
+        imagemagick-dev \
+        openssl \
+        git \
+        openssh-client \
+        graphviz \
+        ttf-dejavu \
+        ttf-droid \
+        ttf-freefont \
+        ttf-liberation \
+        ttf-ubuntu-font-family
 
 RUN docker-php-ext-install \
     bcmath \
@@ -45,8 +54,10 @@ RUN docker-php-ext-install \
 # 不修改文件名会是的event先于sockets载入,使得php无法启动
 RUN mv /usr/local/etc/php/conf.d/docker-php-ext-sockets.ini /usr/local/etc/php/conf.d/0-docker-php-ext-sockets.ini
     
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-install gd
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install gd && \
+    cd /docker-build/php-extensions/xhprof/extension && phpize && ./configure && make && make install && \
+    echo -e "extension=xhprof.so\nxhprof.output_dir=/var/tmp/xhprof" > /usr/local/etc/php/conf.d/xhprof.ini && \
+    mkdir -p /var/tmp/xhprof && chown www-data:www-data /var/tmp/xhprof
 
 RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.tgz && \
     echo -e "\n" | pecl install file:///docker-build/php-extensions/ev-1.0.4.tgz && \

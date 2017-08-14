@@ -53,6 +53,7 @@
 * swoole
 * tokenizer
 * xdebug
+* xhprof
 * xml
 * xmlreader
 * xmlwriter
