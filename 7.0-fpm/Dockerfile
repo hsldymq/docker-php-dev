@@ -37,27 +37,33 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirr
         ttf-ubuntu-font-family
 
 RUN docker-php-ext-install \
-    bcmath \
-    bz2 \
-    exif \
-    imap \
-    mcrypt \
-    mysqli \
-    pcntl \
-    pdo_mysql \
-    pdo_pgsql \
-    pgsql \
-    sockets \
-    zip
+        bcmath \
+        bz2 \
+        exif \
+        imap \
+        mcrypt \
+        mysqli \
+        pcntl \
+        pdo_mysql \
+        pdo_pgsql \
+        pgsql \
+        sockets \
+        zip
 
 # event扩展依赖sockets扩展,修改文件名使得sockets先于event载入.
 # 不修改文件名会是的event先于sockets载入,使得php无法启动
 RUN mv /usr/local/etc/php/conf.d/docker-php-ext-sockets.ini /usr/local/etc/php/conf.d/0-docker-php-ext-sockets.ini
     
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install gd && \
-    cd /docker-build/php-extensions/xhprof/extension && phpize && ./configure && make && make install && \
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-install gd && \
+    cd /docker-build/php-extensions/xhprof/extension && \
+    phpize && ./configure && make && make install && \
     echo -e "extension=xhprof.so\nxhprof.output_dir=/var/tmp/xhprof" > /usr/local/etc/php/conf.d/xhprof.ini && \
-    mkdir -p /var/tmp/xhprof && chown www-data:www-data /var/tmp/xhprof
+    mkdir -p /var/tmp/xhprof && chmod 777 /var/tmp/xhprof && \
+    mkdir -p /var/www/xhprof/xhprof_html && mkdir -p /var/www/xhprof/xhprof_lib && \
+    cp -R /docker-build/php-extensions/xhprof/xhprof_html/* /var/www/xhprof/xhprof_html && \
+    cp -R /docker-build/php-extensions/xhprof/xhprof_lib/* /var/www/xhprof/xhprof_lib && \
+    chmod -R a+w /var/www/xhprof
 
 RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.tgz && \
     echo -e "\n" | pecl install file:///docker-build/php-extensions/ev-1.0.4.tgz && \
