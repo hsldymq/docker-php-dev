@@ -17,4 +17,9 @@
 ### xhprof
 output_dir: /var/tmp/xhprof
 
+### xdebug
+profiler_output_dir: /var/tmp/xdebug/profiler
+trace_output_dir: /var/tmp/xdebug/trace
+idekey: PHPDEBUG
+
 
