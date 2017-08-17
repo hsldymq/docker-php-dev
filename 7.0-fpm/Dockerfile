@@ -74,7 +74,7 @@ RUN cp /docker-build/script/run-xhprof /usr/local/bin && \
 RUN cd /docker-build/php-extensions/xhprof/extension && \
     phpize && ./configure && make && make install && \
     echo -e "extension=xhprof.so\nxhprof.output_dir=/var/tmp/volume/xhprof" > /usr/local/etc/php/conf.d/xhprof.ini && \
-    echo -e "xdebug.profiler_output_dir=/var/tmp/xdebug/profiler\nxdebug.trace_output_dir=/var/tmp/xdebug/trace\nxdebug.idekey=PHPDEBUG" > /usr/local/etc/php/conf.d/xdebug_config.ini
+    echo -e "xdebug.profiler_output_dir=/var/tmp/volume/xdebug/profiler\nxdebug.trace_output_dir=/var/tmp/volume/xdebug/trace\nxdebug.idekey=PHPDEBUG" > /usr/local/etc/php/conf.d/xdebug_config.ini
 
 RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.tgz && \
     echo -e "\n" | pecl install file:///docker-build/php-extensions/ev-1.0.4.tgz && \
