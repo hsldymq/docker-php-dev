@@ -13,6 +13,14 @@
 * swoole: 1.9.13
 * imagick 3.4.3
 * xdebug: 2.5.4
+* xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 
+### xhprof
+> output_dir: /var/tmp/xhprof
+
+### xdebug
+> profiler_output_dir: /var/tmp/xdebug/profiler
+> trace_output_dir: /var/tmp/xdebug/trace
+> idekey: PHPDEBUG
 
 
