@@ -31,7 +31,6 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirr
         unixodbc-dev \
         imagemagick-dev \
         openssl \
-        git \
         openssh-client \
         graphviz \
         ttf-dejavu \
