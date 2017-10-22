@@ -2,7 +2,8 @@ FROM php:7.1-fpm-alpine
 
 ADD build/ /docker-build/
 
-RUN cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
+RUN rm -rf /var/www/html && \
+    cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
 RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirrors.ustc.edu.cn/alpine/latest-stable/community" > /etc/apk/repositories && \
