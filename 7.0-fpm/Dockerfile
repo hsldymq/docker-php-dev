@@ -2,6 +2,10 @@ FROM php:7.0-fpm-alpine
 
 ADD build/ /docker-build/
 
+RUN rm -rf /var/www/html && \
+    cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
+    chmod a+x /usr/bin/docker_start.sh
+
 RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirrors.ustc.edu.cn/alpine/latest-stable/community" > /etc/apk/repositories && \
     apk update && \
     apk upgrade && \
@@ -27,14 +31,14 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirr
         unixodbc-dev \
         imagemagick-dev \
         openssl \
-        git \
         openssh-client \
         graphviz \
         ttf-dejavu \
         ttf-droid \
         ttf-freefont \
         ttf-liberation \
-        ttf-ubuntu-font-family
+        ttf-ubuntu-font-family \
+        rsyslog
 
 RUN docker-php-ext-install \
         bcmath \
@@ -85,7 +89,7 @@ WORKDIR /var/www
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
-CMD ["php-fpm"]
+CMD ["docker_start.sh"]
 
 EXPOSE 9000
 
