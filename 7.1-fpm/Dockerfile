@@ -47,7 +47,7 @@ RUN docker-php-ext-install \
         bcmath \
         bz2 \
         exif \
-        imap \ttps://docs.open.alipay.com/203/107090/
+        imap \
         mcrypt \
         mysqli \
         pcntl \
