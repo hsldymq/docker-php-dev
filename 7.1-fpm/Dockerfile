@@ -2,7 +2,10 @@ FROM php:7.1-fpm-alpine
 
 ADD build/ /docker-build/
 
+# 预先准备环境目录,删除无用文件/目录
 RUN rm -rf /var/www/html && \
+    mkdir -p /etc/syslog-ng/include && \
+    cp /docker-build/config/syslog-ng/syslog-ng.conf /etc/syslog-ng/syslog-ng.conf && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
@@ -38,13 +41,13 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirr
         ttf-freefont \
         ttf-liberation \
         ttf-ubuntu-font-family \
-        rsyslog
+        syslog-ng
 
 RUN docker-php-ext-install \
         bcmath \
         bz2 \
         exif \
-        imap \
+        imap \ttps://docs.open.alipay.com/203/107090/
         mcrypt \
         mysqli \
         pcntl \

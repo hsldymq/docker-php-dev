@@ -2,7 +2,10 @@ FROM php:7.0-fpm-alpine
 
 ADD build/ /docker-build/
 
+# 预先准备环境目录,删除无用文件/目录
 RUN rm -rf /var/www/html && \
+    mkdir -p /etc/syslog-ng/include && \
+    cp /docker-build/config/syslog-ng/syslog-ng.conf /etc/syslog-ng/syslog-ng.conf && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 

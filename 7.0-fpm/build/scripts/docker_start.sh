@@ -2,7 +2,10 @@
 
 function start() {
     prepareDirectories
-    runSyslog
+    prepareSyslog
+
+    tryStartingSyslog
+    
     php-fpm
 } 
 
@@ -16,22 +19,14 @@ function prepareDirFromEnv() {
     eval DIR=\$$1
 
     if [ $DIR ]; then
-        mkdir -vp $DIR
+        mkdir -p $DIR
         chmod 777 $DIR
     fi
 }
 
-function runSyslog() {
+function tryStartingSyslog() {
     if [ "${SYSLOG}" = "on" ]; then
-        if [ $SYSLOG_REMOTE_ADDR ]; then
-            SLR_ADDR=$SYSLOG_REMOTE_ADDR
-            if [ $SYSLOG_REMOTE_PORT ]; then
-                SLR_PORT=$SYSLOG_REMOTE_PORT
-            else
-                SLR_PORT=9997
-            fi
-        fi
-        rsyslogd
+        syslog-ng
     fi
 }
 
