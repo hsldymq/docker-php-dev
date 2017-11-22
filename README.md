@@ -3,10 +3,10 @@
 ####基础镜像: php(alpine版)
 
 #### 使用到的环境变量
-XDEBUG\_PROFILER\_DIR
-XDEBUG\_TRACE\_DIR
-XDEBUG\_IDEKEY
-XHPROFILE\_DIR
+> XDEBUG\_PROFILER\_DIR
+> XDEBUG\_TRACE\_DIR
+> XDEBUG\_IDEKEY
+> XHPROFILE\_DIR
 
 ####启用的扩展
 * amqp
@@ -28,6 +28,7 @@ XHPROFILE\_DIR
 * iconv
 * imagick
 * imap
+* inotify
 * json
 * libxml
 * mbstring
