@@ -1,5 +1,5 @@
  # 镜像说明
-基础镜像: **php:7.1.6-fpm-alpine**
+基础镜像: **php:7.1-fpm-alpine**
 
 ### 个别扩展版本说明:
 * amqp: 1.9.1
@@ -14,15 +14,4 @@
 * imagick 3.4.3
 * xdebug: 2.5.4
 * xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
-
-### xhprof
-> output_dir: /var/tmp/xhprof
-
-### xdebug
-> profiler_output_dir: /var/tmp/xdebug/profiler
-
-> trace_output_dir: /var/tmp/xdebug/trace
-
-> idekey: PHPDEBUG
-
-
+* inotify: 2.0.0
