@@ -74,7 +74,8 @@ RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.t
     pecl install file:///docker-build/php-extensions/swoole-1.9.13.tgz && \
     echo -e "\n" | pecl install file:///docker-build/php-extensions/imagick-3.4.3.tgz && \
     pecl install file:///docker-build/php-extensions/xdebug-2.5.4.tgz && \
-    docker-php-ext-enable amqp ev event memcached mongodb redis pdo_sqlsrv swoole imagick xdebug && \
+    pecl install file:///docker-build/php-extensions/inotify-2.0.0.tgz && \
+    docker-php-ext-enable amqp ev event memcached mongodb redis pdo_sqlsrv swoole imagick xdebug inotify && \
     cd /docker-build/php-extensions/xhprof/extension && \
     phpize && ./configure && make && make install && \
     cd /var/www && rm -rf /docker-build
