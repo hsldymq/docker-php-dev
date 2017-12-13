@@ -9,7 +9,8 @@ RUN rm -rf /var/www/html && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
-RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirrors.ustc.edu.cn/alpine/latest-stable/community" > /etc/apk/repositories && \
+RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/main\n" > /etc/apk/repositories && \
+    echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/community\n" >> /etc/apk/repositories && \
     apk update && \
     apk upgrade && \
     apk --no-cache add ca-certificates && update-ca-certificates && \

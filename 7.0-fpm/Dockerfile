@@ -5,11 +5,12 @@ ADD build/ /docker-build/
 # 预先准备环境目录,删除无用文件/目录
 RUN rm -rf /var/www/html && \
     mkdir -p /etc/syslog-ng/include && \
-    cp /docker-build/config/syslog-ng/syslog-ng.conf /etc/syslog-ng/syslog-ng.conf && \
+    cp -r /docker-build/config/syslog-ng/* /etc/syslog-ng/ && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
-RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirrors.ustc.edu.cn/alpine/latest-stable/community" > /etc/apk/repositories && \
+RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/main\n" > /etc/apk/repositories && \
+    echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/community\n" >> /etc/apk/repositories && \
     apk update && \
     apk upgrade && \
     apk --no-cache add ca-certificates && update-ca-certificates && \
@@ -41,7 +42,7 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/latest-stable/main\nhttps://mirr
         ttf-freefont \
         ttf-liberation \
         ttf-ubuntu-font-family \
-        rsyslog
+        syslog-ng
 
 RUN docker-php-ext-install \
         bcmath \
@@ -97,4 +98,3 @@ ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["docker_start.sh"]
 
 EXPOSE 9000
-
