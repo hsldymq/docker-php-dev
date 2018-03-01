@@ -2,6 +2,10 @@ FROM php:7.1-fpm-alpine
 
 ADD build/ /docker-build/
 
+# 解决iconv字符集转换不支持//IGNORE标记的问题
+# 下面引入了gnu-libiconv库,which在testing仓库中
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
+
 # 预先准备环境目录,删除无用文件/目录
 RUN rm -rf /var/www/html && \
     mkdir -p /etc/syslog-ng/include && \
@@ -11,10 +15,11 @@ RUN rm -rf /var/www/html && \
 
 RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/main\n" > /etc/apk/repositories && \
     echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/community\n" >> /etc/apk/repositories && \
+    echo -e "https://mirrors.ustc.edu.cn/alpine/edge/testing\n" >> /etc/apk/repositories && \
     apk update && \
     apk upgrade && \
-    apk --no-cache add ca-certificates && update-ca-certificates && \
     apk --no-cache add \
+        gnu-libiconv \
         autoconf \
         build-base \
         zlib-dev \

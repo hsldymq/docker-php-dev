@@ -2,8 +2,6 @@
 
 function start() {
     prepareDirectories
-    prepareSyslog
-
     tryStartingSyslog
     
     php-fpm
