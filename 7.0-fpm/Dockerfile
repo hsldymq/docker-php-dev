@@ -13,18 +13,25 @@ RUN rm -rf /var/www/html && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
-RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/main\n" > /etc/apk/repositories && \
-    echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/community\n" >> /etc/apk/repositories && \
+RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.7/main\n" > /etc/apk/repositories && \
+    echo -e "https://mirrors.ustc.edu.cn/alpine/v3.7/community\n" >> /etc/apk/repositories && \
     echo -e "https://mirrors.ustc.edu.cn/alpine/edge/testing\n" >> /etc/apk/repositories && \
     apk update && \
-    apk upgrade && \
+    apk upgrade
+    
+RUN apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-doc-7.0.7.11-r1.apk && \
+    apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-libs-7.0.7.11-r1.apk && \
+    apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-c++-7.0.7.11-r1.apk && \
+    apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-dev-7.0.7.11-r1.apk && \
     apk --no-cache add \
+        ca-certificates \
         gnu-libiconv \
         autoconf \
         build-base \
         zlib-dev \
         libtool \
         linux-headers \
+        gdb \
         postgresql-dev \
         imap-dev \
         bzip2-dev \
@@ -36,9 +43,9 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/main\n" > /etc/apk/reposito
         cyrus-sasl-dev \
         rabbitmq-c-dev \
         libmemcached-dev \
+        imagemagick-dev \
         pcre-dev \
         unixodbc-dev \
-        imagemagick-dev \
         openssl \
         openssh-client \
         graphviz \
@@ -47,7 +54,10 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.6/main\n" > /etc/apk/reposito
         ttf-freefont \
         ttf-liberation \
         ttf-ubuntu-font-family \
-        syslog-ng
+        syslog-ng \
+        strace \
+        procps && \
+    update-ca-certificates
 
 RUN docker-php-ext-install \
         bcmath \
@@ -74,27 +84,41 @@ RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.t
     echo -e "\n" | pecl install file:///docker-build/php-extensions/ev-1.0.4.tgz && \
     echo -e "\n\n\n\n\n\n\n" | pecl install file:///docker-build/php-extensions/event-2.3.0.tgz && \
     echo -e "/usr\n" | pecl install file:///docker-build/php-extensions/memcached-3.0.3.tgz && \
-    pecl install file:///docker-build/php-extensions/mongodb-1.2.9.tgz && \
+    pecl install file:///docker-build/php-extensions/mongodb-1.4.2.tgz && \
     pecl install file:///docker-build/php-extensions/redis-3.1.2.tgz && \
     pecl install file:///docker-build/php-extensions/pdo_sqlsrv-4.1.6.1.tgz && \
     pecl install file:///docker-build/php-extensions/swoole-1.9.13.tgz && \
     echo -e "\n" | pecl install file:///docker-build/php-extensions/imagick-3.4.3.tgz && \
-    pecl install file:///docker-build/php-extensions/xdebug-2.5.4.tgz && \
     pecl install file:///docker-build/php-extensions/inotify-2.0.0.tgz && \
     pecl install file:///docker-build/php-extensions/grpc-1.7.0.tgz && \
-    docker-php-ext-enable amqp ev event memcached mongodb redis pdo_sqlsrv swoole imagick xdebug inotify grpc && \
+    pecl install file:///docker-build/php-extensions/sync-1.1.1.tgz && \
+    pecl install file:///docker-build/php-extensions/xdebug-2.5.4.tgz && \
+    docker-php-ext-enable amqp ev event memcached mongodb redis pdo_sqlsrv swoole imagick inotify grpc sync xdebug && \
     cd /docker-build/php-extensions/xhprof/extension && \
+    phpize && ./configure && make && make install && \
+    cd /docker-build/php-extensions/sysvmsg && \
+    phpize && ./configure && make && make install && \
+    cd /docker-build/php-extensions/sysvsem && \
+    phpize && ./configure && make && make install && \
+    cd /docker-build/php-extensions/sysvshm && \
     phpize && ./configure && make && make install && \
     cd /var/www && rm -rf /docker-build
 
-# 设置xdebug profiler & tracer
+# 设置ini
+# xdebug profiler & tracer
+# curl & openssl 设置CA证书验证文件路径, 默认情况下个别场景会造成 SSL certificate problem: unable to get local issuer certificate错误
 RUN echo -e "xdebug.profiler_output_dir=\${XDEBUG_PROFILER_DIR}" >> /usr/local/etc/php/conf.d/xdebug_config.ini && \
     echo -e "xdebug.trace_output_dir=\${XDEBUG_TRACE_DIR}" >> /usr/local/etc/php/conf.d/xdebug_config.ini && \
-    echo -e "xdebug.idekey=\${XDEBUG_IDEKEY}" >> /usr/local/etc/php/conf.d/xdebug_config.ini
+    echo -e "xdebug.idekey=\${XDEBUG_IDEKEY}" >> /usr/local/etc/php/conf.d/xdebug_config.ini && \
+    echo "curl.info=/etc/ssl/cert.pem" > /usr/local/etc/php/conf.d/curl.ini && \
+    echo "openssl.cafile=/etc/ssl/cert.pem" > /usr/local/etc/php/conf.d/openssl.ini
 
-# 设置xhprof
+# 设置启动并配置编译的扩展
 RUN echo -e "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini && \
-    echo -e "xhprof.output_dir=\${XHPROFILE_DIR}" >> /usr/local/etc/php/conf.d/xhprof.ini
+    echo -e "xhprof.output_dir=\${XHPROFILE_DIR}" >> /usr/local/etc/php/conf.d/xhprof.ini && \
+    echo -e "extension=sysvmsg.so" >> /usr/local/etc/php/conf.d/sysvmsg.ini && \
+    echo -e "extension=sysvsem.so" >> /usr/local/etc/php/conf.d/sysvsem.ini && \
+    echo -e "extension=sysvshm.so" >> /usr/local/etc/php/conf.d/sysvshm.ini
 
 WORKDIR /var/www
 

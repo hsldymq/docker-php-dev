@@ -58,6 +58,10 @@
 * sqlite3
 * standard
 * swoole
+* sync
+* sysvmsg
+* sysvsem
+* sysvshm
 * tokenizer
 * xdebug
 * xhprof
