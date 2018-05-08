@@ -15,3 +15,14 @@
 * xdebug: 2.5.4
 * xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * inotify: 2.0.0
+* grpc: 1.7.0
+
+### xhprof
+> output_dir: /var/tmp/xhprof
+
+### xdebug
+> profiler_output_dir: /var/tmp/xdebug/profiler
+
+> trace_output_dir: /var/tmp/xdebug/trace
+
+> idekey: PHPDEBUG

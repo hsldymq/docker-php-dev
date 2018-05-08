@@ -14,6 +14,8 @@
 * imagick 3.4.3
 * xdebug: 2.5.4
 * xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
+* inotify: 2.0.0
+* grpc: 1.7.0
 
 ### xhprof
 > output_dir: /var/tmp/xhprof
