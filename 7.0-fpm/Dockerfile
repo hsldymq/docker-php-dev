@@ -71,7 +71,10 @@ RUN docker-php-ext-install \
         pdo_pgsql \
         pgsql \
         sockets \
-        zip
+        zip \
+        sysvmsg \
+        sysvsem \
+        sysvshm
 
 # 1. event扩展依赖sockets扩展,修改文件名使得sockets先于event载入. 不修改文件名会是的event先于sockets载入,使得php无法启动
 # 2. 安装GD库扩展
@@ -115,10 +118,7 @@ RUN echo -e "xdebug.profiler_output_dir=\${XDEBUG_PROFILER_DIR}" >> /usr/local/e
 
 # 设置启动并配置编译的扩展
 RUN echo -e "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini && \
-    echo -e "xhprof.output_dir=\${XHPROFILE_DIR}" >> /usr/local/etc/php/conf.d/xhprof.ini && \
-    echo -e "extension=sysvmsg.so" >> /usr/local/etc/php/conf.d/sysvmsg.ini && \
-    echo -e "extension=sysvsem.so" >> /usr/local/etc/php/conf.d/sysvsem.ini && \
-    echo -e "extension=sysvshm.so" >> /usr/local/etc/php/conf.d/sysvshm.ini
+    echo -e "xhprof.output_dir=\${XHPROFILE_DIR}" >> /usr/local/etc/php/conf.d/xhprof.ini
 
 WORKDIR /var/www
 
