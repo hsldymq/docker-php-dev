@@ -32,7 +32,7 @@
 * json
 * libxml
 * mbstring
-* mcrypt
+* mcrypt (7.2及以上除外)
 * memcached
 * mongodb
 * mysqli
@@ -58,7 +58,7 @@
 * sqlite3
 * standard
 * swoole
-* sync
+* sync (7.2及以上除外)
 * sysvmsg
 * sysvsem
 * sysvshm
