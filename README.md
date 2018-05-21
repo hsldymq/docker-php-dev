@@ -58,7 +58,7 @@
 * sqlite3
 * standard
 * swoole
-* sync (7.2及以上除外)
+* sync
 * sysvmsg
 * sysvsem
 * sysvshm
