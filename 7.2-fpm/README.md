@@ -16,6 +16,7 @@
 * xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * inotify: 2.0.0
 * grpc: 1.11.0
+* protobuf: 3.6.1
 * sync: 1.1.1
 
 ### xhprof

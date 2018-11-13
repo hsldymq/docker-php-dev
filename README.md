@@ -32,7 +32,7 @@
 * json
 * libxml
 * mbstring
-* mcrypt (7.2及以上除外)
+* mcrypt (7.1及以下包含)
 * memcached
 * mongodb
 * mysqli
@@ -48,6 +48,7 @@
 * pgsql
 * Phar
 * posix
+* protobuf
 * readline
 * redis
 * Reflection

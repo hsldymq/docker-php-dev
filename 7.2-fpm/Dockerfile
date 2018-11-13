@@ -74,8 +74,8 @@ RUN docker-php-ext-install \
 # 1. event扩展依赖sockets扩展,修改文件名使得sockets先于event载入. 不修改文件名会是的event先于sockets载入,使得php无法启动
 # 2. 安装GD库扩展
 RUN mv /usr/local/etc/php/conf.d/docker-php-ext-sockets.ini /usr/local/etc/php/conf.d/0-docker-php-ext-sockets.ini && \
-   docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-   docker-php-ext-install gd
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-install gd
 
 ## 安装各种扩展 
 RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.tgz && \
@@ -89,10 +89,17 @@ RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.t
     echo -e "\n" | pecl install file:///docker-build/php-extensions/imagick-3.4.3.tgz && \
     pecl install file:///docker-build/php-extensions/inotify-2.0.0.tgz && \
     pecl install file:///docker-build/php-extensions/grpc-1.11.0.tgz && \
+    pecl install file:///docker-build/php-extensions/protobuf-3.6.1.tgz && \
     pecl install file:///docker-build/php-extensions/sync-1.1.1.tgz && \
     pecl install file:///docker-build/php-extensions/xdebug-2.6.0.tgz && \
-    docker-php-ext-enable amqp ev event memcached mongodb redis pdo_sqlsrv swoole imagick inotify grpc sync xdebug && \
+    docker-php-ext-enable amqp ev event memcached mongodb redis pdo_sqlsrv swoole imagick inotify grpc protobuf sync xdebug && \
     cd /docker-build/php-extensions/xhprof/extension && \
+    phpize && ./configure && make && make install && \
+    cd /docker-build/php-extensions/sysvmsg && \
+    phpize && ./configure && make && make install && \
+    cd /docker-build/php-extensions/sysvsem && \
+    phpize && ./configure && make && make install && \
+    cd /docker-build/php-extensions/sysvshm && \
     phpize && ./configure && make && make install && \
     cd /var/www && rm -rf /docker-build
 
