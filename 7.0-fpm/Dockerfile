@@ -1,4 +1,4 @@
-FROM php:7.0-fpm-alpine
+FROM php:7.0-fpm-alpine3.7
 
 ADD build/ /docker-build/
 
@@ -19,11 +19,7 @@ RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.7/main\n" > /etc/apk/reposito
     apk update && \
     apk upgrade
     
-RUN apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-doc-7.0.7.11-r1.apk && \
-    apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-libs-7.0.7.11-r1.apk && \
-    apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-c++-7.0.7.11-r1.apk && \
-    apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-dev-7.0.7.11-r1.apk && \
-    apk --no-cache add \
+RUN apk --no-cache add \
         ca-certificates \
         gnu-libiconv \
         autoconf \
@@ -44,6 +40,7 @@ RUN apk --no-cache add --allow-untrusted /docker-build/apk/v3.7/imagemagick-doc-
         rabbitmq-c-dev \
         libmemcached-dev \
         imagemagick-dev \
+        imagemagick \
         pcre-dev \
         unixodbc-dev \
         openssl \

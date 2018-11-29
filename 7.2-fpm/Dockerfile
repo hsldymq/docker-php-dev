@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine3.7
+FROM php:7.2-fpm-alpine3.8
 
 ADD build/ /docker-build/
 
@@ -13,8 +13,8 @@ RUN rm -rf /var/www/html && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
-RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.7/main\n" > /etc/apk/repositories && \
-    echo -e "https://mirrors.ustc.edu.cn/alpine/v3.7/community\n" >> /etc/apk/repositories && \
+RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.8/main\n" > /etc/apk/repositories && \
+    echo -e "https://mirrors.ustc.edu.cn/alpine/v3.8/community\n" >> /etc/apk/repositories && \
     echo -e "https://mirrors.ustc.edu.cn/alpine/edge/testing\n" >> /etc/apk/repositories && \
     apk update && \
     apk upgrade
@@ -40,6 +40,7 @@ RUN apk --no-cache add \
         rabbitmq-c-dev \
         libmemcached-dev \
         imagemagick-dev \
+        imagemagick \
         pcre-dev \
         unixodbc-dev \
         openssl \
