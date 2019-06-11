@@ -44,7 +44,6 @@
 * pdo_mysql
 * pdo_pgsql
 * pdo_sqlite
-* pdo_sqlsrv
 * pgsql
 * Phar
 * posix
