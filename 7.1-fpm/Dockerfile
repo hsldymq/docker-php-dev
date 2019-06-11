@@ -2,10 +2,6 @@ FROM php:7.1-fpm-alpine3.8
 
 ADD build/ /docker-build/
 
-# 解决iconv字符集转换不支持//IGNORE标记的问题
-# 下面引入了gnu-libiconv库,which在testing仓库中
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
-
 # 预先准备环境目录,删除无用文件/目录
 RUN rm -rf /var/www/html && \
     mkdir -p /etc/syslog-ng/include && \
@@ -15,13 +11,16 @@ RUN rm -rf /var/www/html && \
 
 RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.8/main\n" > /etc/apk/repositories && \
     echo -e "https://mirrors.ustc.edu.cn/alpine/v3.8/community\n" >> /etc/apk/repositories && \
-    echo -e "https://mirrors.ustc.edu.cn/alpine/edge/testing\n" >> /etc/apk/repositories && \
     apk update && \
     apk upgrade
 
+RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv
+# 解决iconv字符集转换不支持//IGNORE标记的问题
+# 下面引入了gnu-libiconv库,which在testing仓库中
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
 RUN apk --no-cache add \
         ca-certificates \
-        gnu-libiconv \
         autoconf \
         build-base \
         zlib-dev \
@@ -86,15 +85,14 @@ RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.t
     echo -e "/usr\n" | pecl install file:///docker-build/php-extensions/memcached-3.0.3.tgz && \
     pecl install file:///docker-build/php-extensions/mongodb-1.4.2.tgz && \
     pecl install file:///docker-build/php-extensions/redis-3.1.2.tgz && \
-    pecl install file:///docker-build/php-extensions/pdo_sqlsrv-4.1.6.1.tgz && \
     pecl install file:///docker-build/php-extensions/swoole-1.9.13.tgz && \
     echo -e "\n" | pecl install file:///docker-build/php-extensions/imagick-3.4.3.tgz && \
     pecl install file:///docker-build/php-extensions/inotify-2.0.0.tgz && \
-    pecl install file:///docker-build/php-extensions/grpc-1.11.0.tgz && \
-    pecl install file:///docker-build/php-extensions/protobuf-3.6.1.tgz && \
+    pecl install file:///docker-build/php-extensions/grpc-1.21.3.tgz && \
+    pecl install file:///docker-build/php-extensions/protobuf-3.8.0.tgz && \
     pecl install file:///docker-build/php-extensions/sync-1.1.1.tgz && \
-    pecl install file:///docker-build/php-extensions/xdebug-2.5.4.tgz && \
-    docker-php-ext-enable amqp ev event memcached mongodb redis pdo_sqlsrv swoole imagick inotify grpc protobuf sync xdebug && \
+    pecl install file:///docker-build/php-extensions/xdebug-2.7.2.tgz && \
+    docker-php-ext-enable amqp ev event memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug && \
     cd /docker-build/php-extensions/xhprof/extension && \
     phpize && ./configure && make && make install && \
     cd /docker-build/php-extensions/sysvmsg && \
