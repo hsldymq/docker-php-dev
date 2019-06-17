@@ -4,8 +4,6 @@ ADD build/ /docker-build/
 
 # 预先准备环境目录,删除无用文件/目录
 RUN rm -rf /var/www/html && \
-    mkdir -p /etc/syslog-ng/include && \
-    cp -r /docker-build/config/syslog-ng/* /etc/syslog-ng/ && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
@@ -50,7 +48,6 @@ RUN apk --no-cache add \
         ttf-freefont \
         ttf-liberation \
         ttf-ubuntu-font-family \
-        syslog-ng \
         strace \
         procps && \
     update-ca-certificates

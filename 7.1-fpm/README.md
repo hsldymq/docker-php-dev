@@ -17,13 +17,3 @@
 * grpc: 1.21.3
 * protobuf: 3.8.0
 * sync: 1.1.1
-
-### xhprof
-> output_dir: /var/tmp/xhprof
-
-### xdebug
-> profiler_output_dir: /var/tmp/xdebug/profiler
-
-> trace_output_dir: /var/tmp/xdebug/trace
-
-> idekey: PHPDEBUG
