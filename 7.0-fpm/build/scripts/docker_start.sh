@@ -2,7 +2,6 @@
 
 function start() {
     prepareDirectories
-    tryStartingSyslog
     
     php-fpm
 } 
@@ -19,12 +18,6 @@ function prepareDirFromEnv() {
     if [ $DIR ]; then
         mkdir -p $DIR
         chmod 777 $DIR
-    fi
-}
-
-function tryStartingSyslog() {
-    if [ "${SYSLOG}" = "on" ]; then
-        syslog-ng
     fi
 }
 
