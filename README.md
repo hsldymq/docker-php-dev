@@ -4,8 +4,11 @@
 
 #### 环境变量
 > XDEBUG\_CONFIG
+
 > XDEBUG\_PROFILER\_DIR
+
 > XDEBUG\_TRACE\_DIR
+
 > XHPROFILE\_DIR
 
 #### 获取镜像
