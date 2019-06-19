@@ -30,7 +30,7 @@ services:
         log_driver: journald 
         environment:
             XDEBUG_CONFIG: "idekey=PHPSTORM remote_enable=on remote_host=192.168.1.2 remote_port=9000"
-            XHPROFILE_DIR: "/var/xhprof"
+            XHPROFILE_DIR: "/path/to/xhprof/directory/in/container"
         volumes:
             - /path/to/project:/path/to/project/in/container
             - /path/to/xhprof/directory:/path/to/xhprof/directory/in/container
