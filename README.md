@@ -24,7 +24,7 @@ docker pull hsldymq/php-dev:latest
 version: "3"
 services:
     php:
-        image: hsldymq/php-dev:latest
+        image: hsldymq/php-dev
         container_name: php
         restart: always
         log_driver: journald 
@@ -34,12 +34,27 @@ services:
         volumes:
             - /path/to/project:/path/to/project/in/container
             - /path/to/xhprof/directory:/path/to/xhprof/directory/in/container
-            - /path/to/php.ini:/usr/local/etc/php/php.int  # 如果不需要覆盖可以不需要这一行
+            - /path/to/php.ini:/usr/local/etc/php/php.int  # 如果不需要覆盖可以去掉这一行
+            - xhprof:/path/to/xhprof/dir    # 如果不需要xhprof可以去掉这一行
         cap_add:
             - SYS_PTRACE
         privileged: true
         security_opt:
             - seccomp=unconfined
+
+# 如果想配合xhprof一起使用还可以我的另一个xhprof镜像(hsldymq/xhprof-report),并加入以下配置
+    xhprof:
+        image: hsldymq/xhprof-reporter
+        container_name: xhprof
+        restart: always
+        environment:
+            XHPROFILE_DIR: "/path/to/xhprof/dir"
+        volumes:
+            - xhprof:/path/to/xhprof/dir
+        ports:
+            - 9527:9527
+volumes:
+    xhprof:
 ```
 
 
