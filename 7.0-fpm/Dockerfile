@@ -82,7 +82,7 @@ RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.t
     echo -e "/usr\n" | pecl install file:///docker-build/php-extensions/memcached-3.0.3.tgz && \
     pecl install file:///docker-build/php-extensions/mongodb-1.4.2.tgz && \
     pecl install file:///docker-build/php-extensions/redis-3.1.2.tgz && \
-    pecl install file:///docker-build/php-extensions/swoole-1.9.13.tgz && \
+    pecl install file:///docker-build/php-extensions/swoole-4.3.5.tgz && \
     echo -e "\n" | pecl install file:///docker-build/php-extensions/imagick-3.4.3.tgz && \
     pecl install file:///docker-build/php-extensions/inotify-2.0.0.tgz && \
     pecl install file:///docker-build/php-extensions/grpc-1.21.3.tgz && \
