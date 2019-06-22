@@ -9,9 +9,9 @@
 * memcached: 3.0.3
 * mongodb: 1.4.2
 * redis: 3.1.2
-* swoole: 1.9.13
+* swoole: 4.3.5
 * imagick 3.4.3
-* xdebug: 2.6.0
+* xdebug: 2.7.2
 * xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * inotify: 2.0.0
 * grpc: 1.21.3
