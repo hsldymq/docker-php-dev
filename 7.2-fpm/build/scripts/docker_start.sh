@@ -22,10 +22,4 @@ function prepareDirFromEnv() {
     fi
 }
 
-function tryStartingSyslog() {
-    if [ "${SYSLOG}" = "on" ]; then
-        syslog-ng
-    fi
-}
-
 start
