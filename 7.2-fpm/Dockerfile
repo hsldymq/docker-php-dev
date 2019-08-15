@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine3.8
+FROM php:7.2-fpm-alpine3.10
 
 ADD build/ /docker-build/
 
@@ -7,31 +7,23 @@ RUN rm -rf /var/www/html && \
     cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
     chmod a+x /usr/bin/docker_start.sh
 
-RUN echo -e "https://mirrors.ustc.edu.cn/alpine/v3.8/main\n" > /etc/apk/repositories && \
-    echo -e "https://mirrors.ustc.edu.cn/alpine/v3.8/community\n" >> /etc/apk/repositories && \
+RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/repositories && \
+    echo -e "https://mirrors.aliyun.com/alpine/v3.10/community\n" >> /etc/apk/repositories && \
     apk update && \
-    apk upgrade
-
-RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv
-# 解决iconv字符集转换不支持//IGNORE标记的问题
-# 下面引入了gnu-libiconv库,which在testing仓库中
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
-
-RUN apk --no-cache add \
-        ca-certificates \
+    apk upgrade && \
+    apk add --no-cache ca-certificates \
         autoconf \
-        build-base \
+        build-base && \
+    update-ca-certificates
+
+RUN apk add --no-cache \
         zlib-dev \
         libtool \
         linux-headers \
         gdb \
         postgresql-dev \
         imap-dev \
-        bzip2-dev \
         libmcrypt-dev \
-        freetype-dev \
-        libpng-dev \
-        libjpeg-turbo-dev \
         libevent-dev \
         cyrus-sasl-dev \
         rabbitmq-c-dev \
@@ -42,38 +34,43 @@ RUN apk --no-cache add \
         unixodbc-dev \
         openssl \
         openssh-client \
-        graphviz \
-        ttf-dejavu \
-        ttf-droid \
-        ttf-freefont \
-        ttf-liberation \
-        ttf-ubuntu-font-family \
-        syslog-ng \
         strace \
         procps && \
     update-ca-certificates
 
-RUN docker-php-ext-install \
-        bcmath \
-        bz2 \
-        exif \
-        imap \
-        mysqli \
-        pcntl \
-        pdo_mysql \
-        pdo_pgsql \
-        pgsql \
-        sockets \
-        zip \
-        sysvmsg \
-        sysvsem \
-        sysvshm
-
-# 1. event扩展依赖sockets扩展,修改文件名使得sockets先于event载入. 不修改文件名会是的event先于sockets载入,使得php无法启动
-# 2. 安装GD库扩展
-RUN mv /usr/local/etc/php/conf.d/docker-php-ext-sockets.ini /usr/local/etc/php/conf.d/0-docker-php-ext-sockets.ini && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-install gd
+RUN docker-php-ext-install bcmath && \
+    apk --no-cache add bzip2-dev && \
+    docker-php-ext-install bz2 && \
+    docker-php-ext-install exif && \
+    apk --no-cache add freetype-dev libpng-dev libjpeg-turbo-dev && \
+    docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr &&
+    docker-php-ext-install gd && \
+    apk add --no-cache gettext-dev && \
+    docker-php-ext-install gettext && \
+    apk --no-cache add gmp-dev && \
+    docker-php-ext-install gmp && \
+    apk --no-cache add imap-dev && \
+    docker-php-ext-install imap && \
+    docker-php-ext-install mysqli && \
+    docker-php-ext-enable mysqli && \
+    docker-php-ext-install pcntl && \
+    docker-php-ext-enable pcntl && \
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-enable pdo_mysql && \
+    docker-php-ext-install pdo_pgsql && \
+    docker-php-ext-enable pdo_pgsql && \
+    docker-php-ext-install pgsql && \
+    docker-php-ext-enable pgsql && \
+    docker-php-ext-install sockets && \
+    docker-php-ext-enable sockets --ini-name 0-docker-php-etc-sockets.init && \
+    docker-php-ext-install zip && \
+    docker-php-ext-enable zip && \
+    docker-php-ext-install sysvmsg && \
+    docker-php-ext-enable sysvmsg && \
+    docker-php-ext-install sysvsem && \
+    docker-php-ext-enable sysvsem && \
+    docker-php-ext-install sysvshm && \
+    docker-php-ext-enable sysvshm
 
 ## 安装各种扩展 
 RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.tgz && \
