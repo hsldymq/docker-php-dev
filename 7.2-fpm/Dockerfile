@@ -13,16 +13,15 @@ RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/reposito
     apk upgrade && \
     apk add --no-cache ca-certificates \
         autoconf \
-        build-base && \
+        build-base \
+        gdb \
+        strace && \
     update-ca-certificates
 
 RUN apk add --no-cache \
         zlib-dev \
         libtool \
         linux-headers \
-        gdb \
-        postgresql-dev \
-        imap-dev \
         libmcrypt-dev \
         libevent-dev \
         cyrus-sasl-dev \
@@ -34,7 +33,6 @@ RUN apk add --no-cache \
         unixodbc-dev \
         openssl \
         openssh-client \
-        strace \
         procps && \
     update-ca-certificates
 
@@ -51,26 +49,23 @@ RUN docker-php-ext-install bcmath && \
     docker-php-ext-install gmp && \
     apk --no-cache add imap-dev && \
     docker-php-ext-install imap && \
+    apk add --no-cache icu-dev && \
+    docker-php-ext-install intl && \
+    apk add --no-cache openldap-dev && \
+    docker-php-ext-install ldap && \
     docker-php-ext-install mysqli && \
-    docker-php-ext-enable mysqli && \
     docker-php-ext-install pcntl && \
-    docker-php-ext-enable pcntl && \
     docker-php-ext-install pdo_mysql && \
-    docker-php-ext-enable pdo_mysql && \
+    apk add --no-cache postgresql-dev && \
     docker-php-ext-install pdo_pgsql && \
-    docker-php-ext-enable pdo_pgsql && \
     docker-php-ext-install pgsql && \
-    docker-php-ext-enable pgsql && \
+    apk add --no-cache libxml2-dev && \
+    docker-php-ext-install soap && \
     docker-php-ext-install sockets && \
-    docker-php-ext-enable sockets --ini-name 0-docker-php-etc-sockets.init && \
-    docker-php-ext-install zip && \
-    docker-php-ext-enable zip && \
     docker-php-ext-install sysvmsg && \
-    docker-php-ext-enable sysvmsg && \
     docker-php-ext-install sysvsem && \
-    docker-php-ext-enable sysvsem && \
     docker-php-ext-install sysvshm && \
-    docker-php-ext-enable sysvshm
+    docker-php-ext-install zip
 
 ## 安装各种扩展 
 RUN echo -e "\n" | pecl install file:///docker-build/php-extensions/amqp-1.9.1.tgz && \
