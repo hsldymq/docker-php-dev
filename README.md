@@ -5,36 +5,19 @@
 #### 获取镜像
 docker pull hsldymq/php-dev:latest
 
-#### 环境变量
-```shell
-# docker run
-docker run --env NAME1=VALUE1 --env NAME1=VALUE2 ...
-```
-
-```yaml
-# docker-compose
-php:
-    ...
-    environment:
-        NAME1: VALUE1
-        NAME2: VALUE2
-        ...
-    ...
-```
-
-预定义的PHP配置的环境变量
+#### 预定义环境变量
 * PHP\_MAX\_EXECUTE\_TIME - 脚本执行时间限制(默认: 30, 单位: 秒)
-* PHP\_MEMORY\_LIMIT - PHP脚本内存占用上限(默认: "128M")
-* PHP\_POST\_MAX\_SIZE - POST数据大小上限(默认: "8M")
-* PHP\_UPLOAD\_MAX\_FILESIZE - 最大文件上传大小(默认: "8M")
+* PHP\_MEMORY\_LIMIT - PHP脚本内存占用上限(默认: 128M)
+* PHP\_POST\_MAX\_SIZE - POST数据大小上限(默认: 8M)
+* PHP\_UPLOAD\_MAX\_FILESIZE - 最大文件上传大小(默认: 8M)
 * PHP\_MAX\_FILE\_UPLOADS - 最大一次文件上传数量(默认: 20)
-* PHP\_SESSION\_NAME - session名,cookie中的session标识(默认: "PHPSESSIONID")
-* PHP\_SESSION\_SAVE\_HANDLER - session存储handler(默认: "files")
+* PHP\_SESSION\_NAME - session名,cookie中的session标识(默认: PHPSESSIONID)
+* PHP\_SESSION\_SAVE\_HANDLER - session存储handler(默认: files)
 * PHP\_SESSION\_SAVE\_PATH - session保存地址(默认: "")
 * PHP\_XDEBUG\_REMOTE_ENABLE - xdebug开启远程调试(默认: 0, 枚举: 0/1)
-* PHP\_XDEBUG\_REMOTE_HOST - xdebug远程调试地址(默认: "localhost")
+* PHP\_XDEBUG\_REMOTE_HOST - xdebug远程调试地址(默认: localhost)
 * PHP\_XDEBUG\_REMOTE_PORT - xdebug远程调试端口(默认: 9000)
-* PHP\_XDEBUG\_IDEKEY - xdebug调试ide key(默认: "PHPSTORM")
+* PHP\_XDEBUG\_IDEKEY - xdebug调试ide key(默认: PHPSTORM)
 * PHP\_XHPROF_DIR
 * DIR\_XDEBUG\_PROFILER
 * DIR\_XDEBUG\_TRACE
