@@ -2,19 +2,18 @@
 
 function start() {
     prepareDirectories
-    tryStartingSyslog
-    
+
     php-fpm
 } 
 
-function prepareDirectories() {
-    prepareDirFromEnv "XDEBUG_PROFILER_DIR"
-    prepareDirFromEnv "XDEBUG_TRACE_DIR"
-    prepareDirFromEnv "XHPROFILE_DIR"
+function prepareDirs() {
+    prepareDirFromEnv $XDEBUG_PROFILER_DIR
+    prepareDirFromEnv $XDEBUG_TRACE_DIR
+    prepareDirFromEnv $XHPROFILE_DIR
 }
 
-function prepareDirFromEnv() {
-    eval DIR=\$$1
+function makeDIR() {
+    DIR=$1
 
     if [ $DIR ]; then
         mkdir -p $DIR
