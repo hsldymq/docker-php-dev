@@ -19,8 +19,6 @@ docker pull hsldymq/php-dev:latest
 * PHP\_XDEBUG\_REMOTE_PORT - xdebug远程调试端口(默认: 9000)
 * PHP\_XDEBUG\_IDEKEY - xdebug调试ide key(默认: PHPSTORM)
 * PHP\_XHPROF_DIR
-* DIR\_XDEBUG\_PROFILER
-* DIR\_XDEBUG\_TRACE
 
 #### 容器中配置文件路径
 ##### php.ini

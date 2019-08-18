@@ -1,11 +1,19 @@
+FROM php:7.2-fpm-alpine3.10 as tmp
+
+COPY extensions /extensions
+RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/repositories && \
+    echo -e "https://mirrors.aliyun.com/alpine/v3.10/community\n" >> /etc/apk/repositories && \
+    apk update && \
+    apk upgrade && \
+    apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
+    cd /extensions/tideways_xhprof && phpize && ./configure && make && make install && \
+    mkdir /php-ext && \
+    cp $(php-config --extension-dir)/tideways_xhprof.so /php-ext
+
 FROM php:7.2-fpm-alpine3.10
 
-ADD build/ /docker-build/
-
-# 预先准备环境目录,删除无用文件/目录
-RUN rm -rf /var/www/html && \
-    cp /docker-build/scripts/docker_start.sh /usr/bin/docker_start.sh && \
-    chmod a+x /usr/bin/docker_start.sh
+COPY --from=tmp /php-ext/tideways_xhprof.so /php-ext/tideways_xhprof.so
+RUN mv /php-ext/tideways_xhprof.so $(php-config --extension-dir)
 
 # bz2 扩展依赖: bzip2-dev
 # gd 扩展依赖: freetype-dev, libpng-dev, libjpeg-turbo-dev
@@ -86,21 +94,26 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     pecl install sync-1.1.1 && \
     pecl install xdebug-2.7.2 && \
     docker-php-ext-enable event --ini-name php-ext-event.ini && \
-    docker-php-ext-enable amqp ev memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug && \
+    docker-php-ext-enable amqp ev memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug tideways_xhprof && \
     apk del --no-network $apkDel
 
-# 设置ini
-# xdebug profiler & tracer
-# curl & openssl 设置CA证书验证文件路径, 默认情况下个别场景会造成 SSL certificate problem: unable to get local issuer certificate错误
-# RUN echo -e "xdebug.profiler_output_dir=\${XDEBUG_PROFILER_DIR}" >> /usr/local/etc/php/conf.d/xdebug_config.ini && \
-#     echo -e "xdebug.trace_output_dir=\${XDEBUG_TRACE_DIR}" >> /usr/local/etc/php/conf.d/xdebug_config.ini && \
-#     echo -e "xdebug.idekey=\${XDEBUG_IDEKEY}" >> /usr/local/etc/php/conf.d/xdebug_config.ini && \
-#     echo "curl.info=/etc/ssl/cert.pem" > /usr/local/etc/php/conf.d/curl.ini && \
-#     echo "openssl.cafile=/etc/ssl/cert.pem" > /usr/local/etc/php/conf.d/openssl.ini
+COPY php.ini /usr/local/etc/php/php.ini
+COPY docker_start.sh /usr/bin/docker_start.sh
+RUN chmod a+x /usr/bin/docker_start.sh
 
-# # 设置启动并配置编译的扩展
-# RUN echo -e "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini && \
-#     echo -e "xhprof.output_dir=\${XHPROFILE_DIR}" >> /usr/local/etc/php/conf.d/xhprof.ini
+ENV PHP_MAX_EXECUTE_TIME 30
+ENV PHP_MEMORY_LIMIT 128M
+ENV PHP_POST_MAX_SIZE 8M
+ENV PHP_UPLOAD_MAX_FILESIZE 8M
+ENV PHP_MAX_FILE_UPLOADS 20
+ENV PHP_SESSION_NAME PHPSESSIONID
+ENV PHP_SESSION_SAVE_HANDLER files
+ENV PHP_SESSION_SAVE_PATH ""
+ENV PHP_XDEBUG_REMOTE_ENABLE 0
+ENV PHP_XDEBUG_REMOTE_HOST localhost
+ENV PHP_XDEBUG_REMOTE_PORT 9000
+ENV PHP_XDEBUG_IDEKEY PHPSTORM
+ENV PHP_XHPROF_DIR ""
 
 WORKDIR /var/www
 
