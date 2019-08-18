@@ -12,9 +12,6 @@ RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/reposito
 
 FROM php:7.2-fpm-alpine3.10
 
-COPY --from=tmp /php-ext/tideways_xhprof.so /php-ext/tideways_xhprof.so
-RUN mv /php-ext/tideways_xhprof.so $(php-config --extension-dir)
-
 # bz2 扩展依赖: bzip2-dev
 # gd 扩展依赖: freetype-dev, libpng-dev, libjpeg-turbo-dev
 # gettext 扩展依赖: gettext-dev
@@ -77,6 +74,8 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --
 # 传递pecl_http_proxy参数允许在pecl install走代理,但需要将--network设置为host才能使用宿主环境的代理
 ARG pecl_http_proxy
 
+COPY --from=tmp /php-ext/tideways_xhprof.so /php-ext/tideways_xhprof.so
+
 # 开启event扩展需要将ini文件重命名,它必须在sockets扩展之后被载入
 RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && apkDel='.phpize-deps' && \
@@ -93,6 +92,7 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     pecl install protobuf-3.8.0 && \
     pecl install sync-1.1.1 && \
     pecl install xdebug-2.7.2 && \
+    mv /php-ext/tideways_xhprof.so $(php-config --extension-dir) && \
     docker-php-ext-enable event --ini-name php-ext-event.ini && \
     docker-php-ext-enable amqp ev memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug tideways_xhprof && \
     apk del --no-network $apkDel
