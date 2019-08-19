@@ -1,13 +1,17 @@
 FROM php:7.2-fpm-alpine3.10 as temp
 
 COPY extensions /extensions
+
+# 编译xhprof和tideways_xhprof
 RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/repositories && \
     echo -e "https://mirrors.aliyun.com/alpine/v3.10/community\n" >> /etc/apk/repositories && \
     apk update && \
     apk upgrade && \
     apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
+    cd /extensions/xhprof && phpize && ./configure && make && make install && \
     cd /extensions/tideways_xhprof && phpize && ./configure && make && make install && \
     mkdir /php-ext && \
+    cp $(php-config --extension-dir)/xhprof.so /php-ext && \
     cp $(php-config --extension-dir)/tideways_xhprof.so /php-ext
 
 FROM php:7.2-fpm-alpine3.10
@@ -74,7 +78,8 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --
 # 传递pecl_http_proxy参数允许在pecl install走代理,但需要将--network设置为host才能使用宿主环境的代理
 ARG pecl_http_proxy
 
-COPY --from=temp /php-ext/tideways_xhprof.so /php-ext/tideways_xhprof.so
+COPY docker_start.sh /usr/bin/docker_start.sh
+COPY --from=temp /php-ext/* /php-ext/
 
 # 开启event扩展需要将ini文件重命名,它必须在sockets扩展之后被载入
 RUN pear config-set http_proxy "${pecl_http_proxy}" && \
@@ -92,28 +97,28 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     pecl install protobuf-3.8.0 && \
     pecl install sync-1.1.1 && \
     pecl install xdebug-2.7.2 && \
+    mv /php-ext/xhprof.so $(php-config --extension-dir) && \
     mv /php-ext/tideways_xhprof.so $(php-config --extension-dir) && \
     docker-php-ext-enable event --ini-name php-ext-event.ini && \
-    docker-php-ext-enable amqp ev memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug tideways_xhprof && \
-    apk del --no-network $apkDel
+    docker-php-ext-enable amqp ev memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug xhprof tideways_xhprof && \
+    apk del --no-network $apkDel && \
+    chmod a+x /usr/bin/docker_start.sh
 
-COPY php.ini /usr/local/etc/php/php.ini
-COPY docker_start.sh /usr/bin/docker_start.sh
-RUN chmod a+x /usr/bin/docker_start.sh
+COPY php.ini /usr/local/etc/php/conf.d/0.php.ini
 
-ENV PHP_MAX_EXECUTE_TIME 30
-ENV PHP_MEMORY_LIMIT 128M
-ENV PHP_POST_MAX_SIZE 8M
-ENV PHP_UPLOAD_MAX_FILESIZE 8M
-ENV PHP_MAX_FILE_UPLOADS 20
-ENV PHP_SESSION_NAME PHPSESSIONID
-ENV PHP_SESSION_SAVE_HANDLER files
-ENV PHP_SESSION_SAVE_PATH ""
-ENV PHP_XDEBUG_REMOTE_ENABLE 0
-ENV PHP_XDEBUG_REMOTE_HOST localhost
-ENV PHP_XDEBUG_REMOTE_PORT 9000
-ENV PHP_XDEBUG_IDEKEY PHPSTORM
-ENV PHP_XHPROF_DIR ""
+ENV PHP_MAX_EXECUTE_TIME=30 \
+    PHP_MEMORY_LIMIT=128M \
+    PHP_POST_MAX_SIZE=8M \
+    PHP_UPLOAD_MAX_FILESIZE=8M \
+    PHP_MAX_FILE_UPLOADS=20 \
+    PHP_SESSION_NAME=PHPSESSIONID \
+    PHP_SESSION_SAVE_HANDLER=files \
+    PHP_SESSION_SAVE_PATH="" \
+    PHP_XDEBUG_REMOTE_ENABLE=0 \
+    PHP_XDEBUG_REMOTE_HOST=localhost \
+    PHP_XDEBUG_REMOTE_PORT=9000 \
+    PHP_XDEBUG_IDEKEY=PHPSTORM \
+    XHPROF_OUTPUT_DIR=""
 
 WORKDIR /var/www
 
