@@ -1,15 +1,12 @@
  #!/bin/sh
 
 function start() {
-    prepareDirectories
+    prepareDirs
 
     php-fpm
 } 
 
 function prepareDirs() {
-    prepareDirFromEnv $XDEBUG_PROFILER_DIR
-    prepareDirFromEnv $XDEBUG_TRACE_DIR
-    prepareDirFromEnv $XHPROFILE_DIR
 }
 
 function makeDIR() {
