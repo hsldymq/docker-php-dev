@@ -3,7 +3,11 @@
 ####基础镜像: php(alpine版)
 
 #### 获取镜像
-docker pull hsldymq/php-dev:latest
+> docker pull hsldymq/php-dev:7.0-fpm
+
+> docker pull hsldymq/php-dev:7.1-fpm
+
+> docker pull hsldymq/php-dev:7.2-fpm
 
 #### 预定义环境变量
 * PHP\_MAX\_EXECUTE\_TIME - 脚本执行时间限制(默认: 30, 单位: 秒)
