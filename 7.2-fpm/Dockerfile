@@ -16,19 +16,19 @@ RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/reposito
 
 FROM php:7.2-fpm-alpine3.10
 
+# amqp 扩展依赖: rabbitmq-c-dev
 # bz2 扩展依赖: bzip2-dev
+# event 扩展依赖: libevent-dev
 # gd 扩展依赖: freetype-dev, libpng-dev, libjpeg-turbo-dev
 # gettext 扩展依赖: gettext-dev
 # gmp 扩展依赖: gmp-dev
+# imagick 扩展依赖: imagemagick-dev
 # imap 扩展依赖: imap-dev
 # intl 扩展依赖: icu-dev
 # ldap 扩展依赖: openldap-dev
+# memcached 扩展依赖: libmemcached-dev
 # pdo_pgsql 扩展依赖: postgresql-dev
 # soap 扩展依赖: libxml2-dev
-# amqp 扩展依赖: rabbitmq-c-dev
-# event 扩展依赖: libevent-dev
-# memcached 扩展依赖: libmemcached-dev
-# imagick 扩展依赖: imagemagick-dev
 RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/repositories && \
     echo -e "https://mirrors.aliyun.com/alpine/v3.10/community\n" >> /etc/apk/repositories && \
     apk update && \
@@ -41,14 +41,14 @@ RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/reposito
         freetype-dev libpng-dev libjpeg-turbo-dev \
         gettext-dev \
         gmp-dev \
-        imap-dev \
         icu-dev \
-        openldap-dev \
-        postgresql-dev \
-        libxml2-dev \
+        imagemagick-dev \
+        imap-dev \
         libevent-dev \
         libmemcached-dev \
-        imagemagick-dev \
+        libxml2-dev \
+        openldap-dev \
+        postgresql-dev \
         rabbitmq-c-dev && \
     update-ca-certificates
 
@@ -78,7 +78,6 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --
 # 传递pecl_http_proxy参数允许在pecl install走代理,但需要将--network设置为host才能使用宿主环境的代理
 ARG pecl_http_proxy
 
-COPY docker_start.sh /usr/bin/docker_start.sh
 COPY --from=temp /php-ext/* /php-ext/
 
 # 开启event扩展需要将ini文件重命名,它必须在sockets扩展之后被载入
@@ -87,24 +86,25 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     printf "\n" | pecl install amqp-1.9.4 && \
     printf "\n" | pecl install ev-1.0.6 && \
     printf "\n\n\n\n\n\n\n\n" | pecl install event-2.5.3 && \
-    printf "\n\n\n\n\n\n\n\n\n" | pecl install memcached-3.1.3 && \
-    pecl install mongodb-1.5.5 && \
-    printf "\n\n" | pecl install redis-5.0.2 && \
-    printf "yes\nyes\nyes\nyes\n" | pecl install swoole-4.4.3 && \
+    pecl install grpc-1.21.3 && \
     printf "\n" | pecl install imagick-3.4.4 && \
     pecl install inotify-2.0.0 && \
-    pecl install grpc-1.21.3 && \
+    printf "\n\n\n\n\n\n\n\n\n" | pecl install memcached-3.1.3 && \
+    pecl install mongodb-1.5.5 && \
     pecl install protobuf-3.8.0 && \
+    printf "\n\n" | pecl install redis-5.0.2 && \
+    printf "yes\nyes\nyes\nyes\n" | pecl install swoole-4.4.3 && \
     pecl install sync-1.1.1 && \
     pecl install xdebug-2.7.2 && \
     mv /php-ext/xhprof.so $(php-config --extension-dir) && \
     mv /php-ext/tideways_xhprof.so $(php-config --extension-dir) && \
     docker-php-ext-enable event --ini-name php-ext-event.ini && \
     docker-php-ext-enable amqp ev memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug xhprof tideways_xhprof && \
-    apk del --no-network $apkDel && \
-    chmod a+x /usr/bin/docker_start.sh
+    apk del --no-network $apkDel
 
 COPY php.ini /usr/local/etc/php/conf.d/0.php.ini
+COPY docker_start.sh /usr/bin/docker_start.sh
+RUN chmod a+x /usr/bin/docker_start.sh
 
 ENV PHP_MAX_EXECUTE_TIME=30 \
     PHP_MEMORY_LIMIT=128M \
