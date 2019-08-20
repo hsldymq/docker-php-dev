@@ -1,6 +1,6 @@
 # PHP开发用镜像
 
-####基础镜像: php(alpine版)
+####基础镜像: php(alpine)
 
 #### 获取镜像
 > docker pull hsldymq/php-dev:7.0-fpm
@@ -22,11 +22,7 @@
 * PHP\_XDEBUG\_REMOTE_HOST - xdebug远程调试地址(默认: localhost)
 * PHP\_XDEBUG\_REMOTE_PORT - xdebug远程调试端口(默认: 9000)
 * PHP\_XDEBUG\_IDEKEY - xdebug调试ide key(默认: PHPSTORM)
-* PHP\_XHPROF_DIR
-
-#### 容器中配置文件路径
-##### php.ini
-/usr/local/etc/php/php.ini
+* XHPROF_OUT_DIR - xhprof数据保存路径(默认: "")
 
 #### 使用
 ##### docker-compose
@@ -57,7 +53,7 @@ services:
         security_opt:
             - seccomp=unconfined
 
-# 如果想配合xhprof一起使用还可以我的另一个xhprof镜像(hsldymq/xhprof-report),并加入以下配置
+# 如果想配合xhprof一起使用还可以我的另一个xhprof镜像(hsldymq/xhprof-reporter),并加入以下配置
     xhprof:
         image: hsldymq/xhprof-reporter
         container_name: xhprof
@@ -72,8 +68,6 @@ volumes:
     xhprof:
 ```
 
-
-
 #### 启用的扩展
 * amqp
 * bcmath
@@ -82,7 +76,7 @@ volumes:
 * ctype
 * curl
 * date
-* dom 
+* dom
 * ev
 * event
 * exif
@@ -90,15 +84,20 @@ volumes:
 * filter
 * ftp
 * gd
+* gettext
+* gmp
+* grpc
 * hash
 * iconv
 * imagick
 * imap
 * inotify
+* intl
 * json
+* ldap
 * libxml
 * mbstring
-* mcrypt (7.1及以下包含)
+* mcrypt (<= php 7.1)
 * memcached
 * mongodb
 * mysqli
@@ -119,7 +118,9 @@ volumes:
 * Reflection
 * session
 * SimpleXML
+* soap
 * sockets
+* sodium (>= php 7.2)
 * SPL
 * sqlite3
 * standard
@@ -128,6 +129,7 @@ volumes:
 * sysvmsg
 * sysvsem
 * sysvshm
+* tideways_xhprof
 * tokenizer
 * xdebug
 * xhprof
@@ -136,25 +138,3 @@ volumes:
 * xmlwriter
 * zip
 * zlib
-
-#### 环境变量
-* PHP_MAX_EXECUTE_TIME - 脚本执行时间限制(默认: 30, 单位: 秒)
-    * docker run: 
-        * > docker run --env PHP_MAX_EXECUTE_TIME=120 ... 
-    * docker-compose: 
-        * > PHP_MAX_EXECUTE_TIME: 120
-* PHP_MEMORY_LIMIT - PHP脚本内存占用上限(默认: "128M"). 例: 
-    * docker run: 
-        * > docker run --env PHP_MEMORY_LIMIT=1G ... 
-    * docker-compose: 
-        * > PHP_MEMORY_LIMIT: "1G"
-* PHP_POST_MAX_SIZE - POST数据大小上限(默认: "8M")
-    * docker run: 
-        * > docker run --env PHP_POST_MAX_SIZE=100M ... 
-    * docker-compose: 
-        * > PHP_POST_MAX_SIZE: "100M"
-* PHP_UPLOAD_MAX_FILESIZE - 最大文件上传大小(默认: "8M")
-* PHP_MAX_FILE_UPLOADS - 最大一次文件上传数量(默认: 20)
-* PHP_SESSION_NAME - session名,cookie中的session标识(默认: "PHPSESSIONID")
-* PHP_SESSION_SAVE_HANDLER - session存储handler(默认: "files")
-* PHP_SESSION_SAVE_PATH - session保存地址(默认: "")
