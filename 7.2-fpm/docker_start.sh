@@ -7,6 +7,7 @@ function start() {
 } 
 
 function prepareDirs() {
+    makeDIR "${XHPROF_OUTPUT_DIR}"
 }
 
 function makeDIR() {
