@@ -39,14 +39,12 @@ services:
             PHP_XDEBUG_REMOTE_HOST: 192.168.1.2
             PHP_XDEBUG_REMOTE_PORT: 9000
             PHP_XDEBUG_IDEKEY: PHPSTORM
-            PHP_XHPROF_DIR: "/path/to/xhprof/directory/in/container"
+            XHPROF_OUTPUT_DIR: /path/to/xhprof/dir/in/container
         ports:
             - 9000:9000
         volumes:
             - /path/to/project:/path/to/project/in/container
-            - /path/to/xhprof/directory:/path/to/xhprof/directory/in/container
-            - /path/to/php.ini:/usr/local/etc/php/php.int  # 如果不需要覆盖可以去掉这一行
-            - xhprof:/path/to/xhprof/dir    # 如果不需要xhprof可以去掉这一行
+            - xhprof:/path/to/xhprof/dir/in/container           # 如果不需要xhprof可以去掉这一行
         cap_add:
             - SYS_PTRACE
         privileged: true
@@ -59,9 +57,9 @@ services:
         container_name: xhprof
         restart: always
         environment:
-            XHPROFILE_DIR: "/path/to/xhprof/dir"
+            XHPROF_OUTPUT_DIR: /path/to/xhprof/dir/in/container
         volumes:
-            - xhprof:/path/to/xhprof/dir
+            - xhprof:/path/to/xhprof/dir/in/container
         ports:
             - 9527:9527
 volumes:
