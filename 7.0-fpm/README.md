@@ -19,7 +19,7 @@
 * gd: 7.0.33
 * gettext: 7.0.33
 * gmp: 7.0.33
-* grpc: 1.21.3
+* grpc: 1.23.0
 * hash: 1.0
 * iconv: 7.0.33
 * imagick: 3.4.4

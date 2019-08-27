@@ -89,7 +89,7 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     printf "\n" | pecl install amqp-1.9.4 && \
     printf "\n" | pecl install ev-1.0.6 && \
     printf "\n\n\n\n\n\n\n\n" | pecl install event-2.5.3 && \
-    pecl install grpc-1.21.3 && \
+    pecl install grpc-1.23.0 && \
     printf "\n" | pecl install imagick-3.4.4 && \
     pecl install inotify-2.0.0 && \
     printf "\n\n\n\n\n\n\n\n\n" | pecl install memcached-3.1.3 && \
@@ -105,7 +105,7 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     docker-php-ext-enable amqp ev grpc memcached mongodb imagick inotify protobuf redis swoole sync tideways_xhprof xdebug xhprof && \
     apk del --no-network $apkDel
 
-COPY php.ini /usr/local/etc/php/conf.d/0.php.ini
+COPY 0.php.ini /usr/local/etc/php/conf.d/0.php.ini
 COPY docker_start.sh /usr/bin/docker_start.sh
 RUN chmod a+x /usr/bin/docker_start.sh
 
