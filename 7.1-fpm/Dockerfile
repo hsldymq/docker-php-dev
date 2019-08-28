@@ -103,7 +103,8 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     mv /php-ext/tideways_xhprof.so $(php-config --extension-dir) && \
     docker-php-ext-enable event --ini-name php-ext-event.ini && \
     docker-php-ext-enable amqp ev grpc memcached mongodb imagick inotify protobuf redis swoole sync tideways_xhprof xdebug xhprof && \
-    apk del --no-network $apkDel
+    apk del --no-network $apkDel && \
+    pear config-set http_proxy ""
 
 COPY 0.php.ini /usr/local/etc/php/conf.d/0.php.ini
 COPY docker_start.sh /usr/bin/docker_start.sh
