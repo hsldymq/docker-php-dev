@@ -38,6 +38,7 @@ RUN echo -e "https://mirrors.aliyun.com/alpine/v3.7/main\n" > /etc/apk/repositor
         ca-certificates \
         gdb \
         strace \
+        iproute2 \
         bzip2-dev \
         freetype-dev libpng-dev libjpeg-turbo-dev \
         gettext-dev \
