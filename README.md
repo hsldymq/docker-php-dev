@@ -33,7 +33,8 @@ services:
         image: hsldymq/php-dev
         container_name: php
         restart: always
-        log_driver: journald 
+        logging:
+            driver: journald
         environment:
             PHP_XDEBUG_REMOTE_ENABLE: 1
             PHP_XDEBUG_REMOTE_HOST: 192.168.1.2
@@ -56,6 +57,8 @@ services:
         image: hsldymq/xhprof-reporter
         container_name: xhprof
         restart: always
+        logging:
+            driver: journald
         environment:
             XHPROF_OUTPUT_DIR: /path/to/xhprof/dir/in/container
         volumes:
