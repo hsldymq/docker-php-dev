@@ -41,8 +41,6 @@ services:
             PHP_XDEBUG_REMOTE_PORT: 9000
             PHP_XDEBUG_IDEKEY: PHPSTORM
             XHPROF_OUTPUT_DIR: /path/to/xhprof/dir/in/container
-        ports:
-            - 9000:9000
         volumes:
             - /path/to/project:/path/to/project/in/container
             - xhprof:/path/to/xhprof/dir/in/container           # 如果不需要xhprof可以去掉这一行
@@ -52,7 +50,7 @@ services:
         security_opt:
             - seccomp=unconfined
 
-# 如果想配合xhprof一起使用还可以我的另一个xhprof镜像(hsldymq/xhprof-reporter),并加入以下配置
+    # 如果想配合xhprof一起使用还可以我的另一个xhprof镜像(hsldymq/xhprof-reporter),并加入以下配置
     xhprof:
         image: hsldymq/xhprof-reporter
         container_name: xhprof
