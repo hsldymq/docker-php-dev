@@ -45,6 +45,7 @@
 * Phar: 2.0.2
 * posix: 7.2.21
 * protobuf: 3.8.0
+* rdkafka: 4.0.0
 * readline: 7.2.21
 * redis: 5.0.2
 * Reflection: 7.2.21

@@ -28,6 +28,7 @@ FROM php:7.2-fpm-alpine3.10
 # ldap 扩展依赖: openldap-dev
 # memcached 扩展依赖: libmemcached-dev
 # pdo_pgsql 扩展依赖: postgresql-dev
+# rdkafka 扩展依赖: librdkafka-dev
 # soap 扩展依赖: libxml2-dev
 RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/repositories && \
     echo -e "https://mirrors.aliyun.com/alpine/v3.10/community\n" >> /etc/apk/repositories && \
@@ -48,6 +49,7 @@ RUN echo -e "https://mirrors.aliyun.com/alpine/v3.10/main\n" > /etc/apk/reposito
         libevent-dev \
         libmemcached-dev \
         libxml2-dev \
+        librdkafka-dev \
         openldap-dev \
         postgresql-dev \
         rabbitmq-c-dev && \
@@ -94,13 +96,14 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     pecl install mongodb-1.5.5 && \
     pecl install protobuf-3.8.0 && \
     printf "\n\n" | pecl install redis-5.0.2 && \
+    pecl install rdkafka-4.0.0 && \
     printf "yes\nyes\nyes\nyes\n" | pecl install swoole-4.4.3 && \
     pecl install sync-1.1.1 && \
     pecl install xdebug-2.7.2 && \
     mv /php-ext/xhprof.so $(php-config --extension-dir) && \
     mv /php-ext/tideways_xhprof.so $(php-config --extension-dir) && \
     docker-php-ext-enable event --ini-name php-ext-event.ini && \
-    docker-php-ext-enable amqp ev memcached mongodb redis swoole imagick inotify grpc protobuf sync xdebug xhprof tideways_xhprof && \
+    docker-php-ext-enable amqp ev grpc memcached mongodb imagick inotify protobuf redis rdkafka swoole sync tideways_xhprof xdebug xhprof && \
     apk del --no-network $apkDel && \
     pear config-set http_proxy ""
 
