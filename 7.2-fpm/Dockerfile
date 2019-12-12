@@ -87,6 +87,7 @@ COPY --from=temp /php-ext/* /php-ext/
 RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && apkDel='.phpize-deps' && \
     printf "\n" | pecl install amqp-1.9.4 && \
+    printf "\n" | pecl install apcu-5.1.18 && \
     printf "\n" | pecl install ev-1.0.6 && \
     printf "\n\n\n\n\n\n\n\n" | pecl install event-2.5.3 && \
     pecl install grpc-1.23.0 && \
@@ -103,7 +104,7 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     mv /php-ext/xhprof.so $(php-config --extension-dir) && \
     mv /php-ext/tideways_xhprof.so $(php-config --extension-dir) && \
     docker-php-ext-enable event --ini-name php-ext-event.ini && \
-    docker-php-ext-enable amqp ev grpc memcached mongodb imagick inotify protobuf redis rdkafka swoole sync tideways_xhprof xdebug xhprof && \
+    docker-php-ext-enable amqp apcu ev grpc memcached mongodb imagick inotify protobuf redis rdkafka swoole sync tideways_xhprof xdebug xhprof && \
     apk del --no-network $apkDel && \
     pear config-set http_proxy ""
 
