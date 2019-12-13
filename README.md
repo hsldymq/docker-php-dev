@@ -9,6 +9,8 @@
 
 > docker pull hsldymq/php-dev:7.2-fpm
 
+> docker pull hsldymq/php-dev:7.4-fpm
+
 #### 预定义环境变量
 * PHP\_MAX\_EXECUTE\_TIME - php.ini配置: max_execution_time (默认: 30, 单位: 秒)
 * PHP\_MEMORY\_LIMIT - php.ini配置: memory_limit (默认: 128M)
@@ -67,73 +69,4 @@ volumes:
     xhprof:
 ```
 
-#### 启用的扩展
-* amqp
-* bcmath
-* bz2
-* Core
-* ctype
-* curl
-* date
-* dom
-* ev
-* event
-* exif
-* fileinfo
-* filter
-* ftp
-* gd
-* gettext
-* gmp
-* grpc
-* hash
-* iconv
-* imagick
-* imap
-* inotify
-* intl
-* json
-* ldap
-* libxml
-* mbstring
-* mcrypt (<= php 7.1)
-* memcached
-* mongodb
-* mysqli
-* mysqlnd
-* openssl
-* pcntl
-* pcre
-* PDO
-* pdo_mysql
-* pdo_pgsql
-* pdo_sqlite
-* pgsql
-* Phar
-* posix
-* protobuf
-* readline
-* redis
-* Reflection
-* session
-* SimpleXML
-* soap
-* sockets
-* sodium (>= php 7.2)
-* SPL
-* sqlite3
-* standard
-* swoole
-* sync
-* sysvmsg
-* sysvsem
-* sysvshm
-* tideways_xhprof
-* tokenizer
-* xdebug
-* xhprof
-* xml
-* xmlreader
-* xmlwriter
-* zip
-* zlib
+#### 启用的扩展: 查看每一个目录下的README.md
