@@ -92,12 +92,12 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     printf "\n" | pecl install apcu-5.1.18 && \
     printf "\n" | pecl install ev-1.0.6 && \
     printf "\n\n\n\n\n\n\n\n" | pecl install event-2.5.3 && \
-    pecl install grpc-1.23.0 && \
+    pecl install grpc-1.26.0 && \
     printf "\n" | pecl install imagick-3.4.4 && \
     pecl install inotify-2.0.0 && \
     printf "\n\n\n\n\n\n\n\n\n" | pecl install memcached-3.1.3 && \
     pecl install mongodb-1.5.5 && \
-    pecl install protobuf-3.8.0 && \
+    pecl install protobuf-3.11.2 && \
     printf "\n\n" | pecl install redis-5.0.2 && \
     pecl install rdkafka-4.0.0 && \
     printf "yes\nyes\nyes\nyes\n" | pecl install swoole-4.4.3 && \

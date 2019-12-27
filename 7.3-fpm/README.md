@@ -25,7 +25,7 @@ xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * gd: 7.3.12
 * gettext: 7.3.12
 * gmp: 7.3.12
-* grpc: 1.23.0
+* grpc: 1.26.0
 * hash: 7.3.12
 * iconv: 7.3.12
 * imagick: 3.4.4
@@ -50,7 +50,7 @@ xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * pgsql: 7.3.12
 * Phar: 7.3.12
 * posix: 7.3.12
-* protobuf: 3.8.0
+* protobuf: 3.11.2
 * rdkafka: 4.0.0
 * readline: 7.3.12
 * redis: 5.0.2
