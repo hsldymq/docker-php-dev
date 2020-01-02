@@ -1,6 +1,11 @@
  # 镜像说明
 基础镜像: **php:7.1-fpm-alpine3.10**
 
+### 非PECL扩展信息:
+tideways_xhprof: 来自[tideways/php-xhprof-extension](https://github.com/tideways/php-xhprof-extension)
+
+xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
+
 ### 个别扩展版本说明:
 * amqp: 1.9.4
 * apcu: 5.1.18
@@ -20,7 +25,7 @@
 * gd: 7.1.31
 * gettext: 7.1.31
 * gmp: 7.1.31
-* grpc: 1.23.0
+* grpc: 1.26.0
 * hash: 1.0
 * iconv: 7.1.31
 * imagick: 3.4.4
@@ -35,7 +40,7 @@
 * memcached: 3.1.3
 * mongodb: 1.5.5
 * mysqli: 7.1.31
-* mysqlnd: mysqlnd 5.0.12-dev - 20150407
+* mysqlnd: mysqlnd 5.0.12-dev - 20150407 - $Id: 38fea24f2847fa7519001be390c98ae0acafe387 $
 * openssl: 7.1.31
 * pcntl: 7.1.31
 * pcre: 7.1.31
@@ -46,7 +51,7 @@
 * pgsql: 7.1.31
 * Phar: 2.0.2
 * posix: 7.1.31
-* protobuf: 3.8.0
+* protobuf: 3.11.2
 * rdkafka: 4.0.0
 * readline: 7.1.31
 * redis: 5.0.2
@@ -63,10 +68,10 @@
 * sysvmsg: 7.1.31
 * sysvsem: 7.1.31
 * sysvshm: 7.1.31
-* tideways_xhprof: 5.0.0 (来自[tideways/php-xhprof-extension](https://github.com/tideways/php-xhprof-extension))
+* tideways_xhprof: 5.0.0
 * tokenizer: 7.1.31
 * xdebug: 2.7.2
-* xhprof: 2.1.0 (来自[longxinH/xhprof](https://github.com/longxinH/xhprof))
+* xhprof: 2.1.0
 * xml: 7.1.31
 * xmlreader: 7.1.31
 * xmlwriter: 7.1.31
