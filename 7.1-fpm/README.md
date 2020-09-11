@@ -63,7 +63,7 @@ xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * SPL: 7.1.31
 * sqlite3: 7.1.31
 * standard: 7.1.31
-* swoole: 4.4.3
+* swoole: 4.5.3
 * sync: 1.1.1
 * sysvmsg: 7.1.31
 * sysvsem: 7.1.31

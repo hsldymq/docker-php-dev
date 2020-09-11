@@ -104,7 +104,7 @@ RUN pear config-set http_proxy "${pecl_http_proxy}" && \
     pecl install protobuf-3.11.2 && \
     printf "\n\n" | pecl install redis-5.0.2 && \
     pecl install rdkafka-4.0.0 && \
-    printf "yes\nyes\nyes\nyes\n" | pecl install swoole-4.4.3 && \
+    printf "yes\nyes\nyes\nyes\n" | pecl install swoole-4.5.3 && \
     pecl install sync-1.1.1 && \
     pecl install xdebug-2.7.2 && \
     mv /php-ext/xhprof.so $(php-config --extension-dir) && \
