@@ -63,7 +63,7 @@ xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * SPL: 7.4.0
 * sqlite3: 7.4.0
 * standard: 7.4.0
-* swoole: 4.4.3
+* swoole: 4.5.3
 * sync: 1.1.1
 * sysvmsg: 7.4.0
 * sysvsem: 7.4.0
@@ -77,3 +77,10 @@ xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * xmlwriter: 7.4.0
 * zip: 1.15.5
 * zlib: 7.4.0
+
+### build
+允许通过代理加速pecl扩展的下载
+
+```shell
+docker build -t tag --network host --build-arg pecl_http_proxy=proxy_adrr .
+```
