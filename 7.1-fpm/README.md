@@ -77,3 +77,10 @@ xhprof: 来自[longxinH/xhprof](https://github.com/longxinH/xhprof)
 * xmlwriter: 7.1.31
 * zip: 1.13.5
 * zlib: 7.1.31
+
+### build
+允许通过代理加速pecl扩展的下载
+
+```shell
+docker build -t tag --network host --build-arg pecl_http_proxy=proxy_adrr .
+```
